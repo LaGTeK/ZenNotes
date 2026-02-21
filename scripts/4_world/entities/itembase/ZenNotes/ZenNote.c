@@ -7,7 +7,7 @@ class ZenNote extends Paper
 	{
 		super.DeferredInit();
 
-		if (GetGame().IsDedicatedServer())
+		if (g_Game.IsDedicatedServer())
 		{
 			if (GetZenNotesConfig().DeleteAllNotes)
 			{
@@ -79,11 +79,11 @@ class ZenNote extends Paper
 			}
 
 			m_ZenNoteData = params.param1;
-			if (!GetGame().GetUIManager())
+			if (!g_Game.GetUIManager())
 				return;
 
 			// Show note GUI as read-only
-			ZenNoteGUI gui = ZenNoteGUI.Cast(GetGame().GetUIManager().EnterScriptedMenu(ZenNotesMenu.NOTE_GUI, GetGame().GetUIManager().GetMenu()));
+			ZenNoteGUI gui = ZenNoteGUI.Cast(g_Game.GetUIManager().EnterScriptedMenu(ZenNotesMenu.NOTE_GUI, g_Game.GetUIManager().GetMenu()));
 
 			if (gui)
 			{
@@ -93,7 +93,7 @@ class ZenNote extends Paper
 			}
 
 			// For compatibility with @ZenCraftingSounds
-			if (GetGame().ConfigIsExisting("CfgSoundSets Zen_Paper_loop_SoundSet"))
+			if (g_Game.ConfigIsExisting("CfgSoundSets Zen_Paper_loop_SoundSet"))
 			{
 				EffectSound effect = SEffectManager.PlaySound("Zen_Paper_loop_SoundSet", GetPosition());
 				effect.SetAutodestroy(true);

@@ -21,7 +21,7 @@ class ZenNotesConfig
 	// Load config file or create default file if config doesn't exsit
 	void Load()
 	{
-		if (!GetGame().IsDedicatedServer())
+		if (!g_Game.IsDedicatedServer())
 			return;
 
 		if (FileExist(zenModFolder + zenConfigName))

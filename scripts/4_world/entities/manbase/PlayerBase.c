@@ -6,7 +6,7 @@ modded class PlayerBase
 
         #ifndef SERVER
 		//! NOTES
-        UIScriptedMenu menu = GetGame().GetUIManager().GetMenu();
+        UIScriptedMenu menu = g_Game.GetUIManager().GetMenu();
         if (!menu)
 			return;
 

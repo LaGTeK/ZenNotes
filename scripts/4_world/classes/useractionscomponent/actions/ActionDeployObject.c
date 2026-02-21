@@ -13,7 +13,7 @@ modded class ActionDeployObject
 
     override bool ActionCondition(PlayerBase player, ActionTarget target, ItemBase item)
     {
-        if (GetGame().IsClient())
+        if (g_Game.IsClient())
         {
             if (player.IsPlacingLocal() && item.IsKindOf("Paper"))
                 return true;

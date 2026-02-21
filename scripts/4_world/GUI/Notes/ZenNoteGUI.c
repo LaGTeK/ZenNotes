@@ -30,7 +30,7 @@ class ZenNoteGUI extends UIScriptedMenu
 	// Not sure if this is necessary, but I always clean up after myself if you know what I mean
 	void ~ZenNoteGUI()
 	{
-		if (!GetGame())
+		if (!g_Game)
 			return;
 		
 		// Cleanup - unlink widgets
@@ -59,8 +59,8 @@ class ZenNoteGUI extends UIScriptedMenu
 	{
 		super.OnShow();
 
-		GetGame().GetMission().PlayerControlDisable(INPUT_EXCLUDE_ALL);
-		GetGame().GetMission().GetHud().Show(false);
+		g_Game.GetMission().PlayerControlDisable(INPUT_EXCLUDE_ALL);
+		g_Game.GetMission().GetHud().Show(false);
 		GetUApi().GetInputByName("UAPersonView").Lock();
 		PPEffects.SetBlurMenu(0.5);
 	}
@@ -70,8 +70,8 @@ class ZenNoteGUI extends UIScriptedMenu
 	{
 		super.OnHide();
 
-		GetGame().GetMission().PlayerControlEnable(true);
-		GetGame().GetMission().GetHud().Show(true);
+		g_Game.GetMission().PlayerControlEnable(true);
+		g_Game.GetMission().GetHud().Show(true);
 		GetUApi().GetInputByName("UAPersonView").Unlock();
 		PPEffects.SetBlurMenu(0);
 	}
@@ -86,7 +86,7 @@ class ZenNoteGUI extends UIScriptedMenu
 	override Widget Init()
 	{
 		// Load layout
-		layoutRoot = GetGame().GetWorkspace().CreateWidgets(GetLayoutFile());
+		layoutRoot = g_Game.GetWorkspace().CreateWidgets(GetLayoutFile());
 
 		// Load text widget arrays
 		for (int i = 0; i < 100; i++)
@@ -400,7 +400,7 @@ class ZenNoteGUI extends UIScriptedMenu
 
 			Param1<ref ZenNoteData> params = new Param1<ref ZenNoteData>(note_data);
 
-			if (msgTxt != "" && GetGame().GetPlayer())
+			if (msgTxt != "" && g_Game.GetPlayer())
 			{
 				m_Paper.RPCSingleParam(ZenNotesRPCs.SEND_WRITTEN_NOTE, params, true, NULL);
 			}
@@ -410,7 +410,7 @@ class ZenNoteGUI extends UIScriptedMenu
 			GetZenNotesClientConfig().Save();
 		}
 
-		UIManager uiManager = GetGame().GetUIManager();
+		UIManager uiManager = g_Game.GetUIManager();
 
 		if (!uiManager)
 			return true;
@@ -424,7 +424,7 @@ class ZenNoteGUI extends UIScriptedMenu
 			{
 				uiManager.HideScriptedMenu(noteMenu);
 
-				Mission mission = GetGame().GetMission();
+				Mission mission = g_Game.GetMission();
 				if (mission)
 				{
 					mission.PlayerControlEnable(true);
@@ -448,6 +448,6 @@ class ZenNoteGUI extends UIScriptedMenu
 	private void ZenNote_DebugMsg(string msg)
 	{
 		Print(msg);
-		GetGame().GetMission().OnEvent(ChatMessageEventTypeID, new ChatMessageEventParams(CCDirect, "", msg, ""));
+		g_Game.GetMission().OnEvent(ChatMessageEventTypeID, new ChatMessageEventParams(CCDirect, "", msg, ""));
 	}
 }

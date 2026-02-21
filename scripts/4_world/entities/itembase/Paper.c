@@ -31,7 +31,7 @@ modded class Paper
                 ZenNoteGUI.CAN_CHANGE_FONTS = data_from_server.param2;
 
                 // UI will be open before the above data is set, so we need to update it after data is received
-                GetGame().GetCallQueue(CALL_CATEGORY_GAMEPLAY).CallLater(UpdateGUI, 50, false);
+                g_Game.GetCallQueue(CALL_CATEGORY_GAMEPLAY).CallLater(UpdateGUI, 50, false);
             }
 
             return;
@@ -41,8 +41,8 @@ modded class Paper
         if (rpc_type == ZenNotesRPCs.SEND_WRITTEN_NOTE)
         {
             int highBits, lowBits;
-            GetGame().GetPlayerNetworkIDByIdentityID(sender.GetPlayerId(), lowBits, highBits);
-            PlayerBase player = PlayerBase.Cast(GetGame().GetObjectByNetworkId(lowBits, highBits));
+            g_Game.GetPlayerNetworkIDByIdentityID(sender.GetPlayerId(), lowBits, highBits);
+            PlayerBase player = PlayerBase.Cast(g_Game.GetObjectByNetworkId(lowBits, highBits));
 
             if (!player || !sender) // If we can't identify the player who sent this note data, stop here.
                 return;
@@ -105,7 +105,7 @@ modded class Paper
                         SetQuantity(GetQuantity() - 1);
 
                         // Spawn a note on the ground
-                        ZenNote noteGround = ZenNote.Cast(GetGame().CreateObjectEx("ZenNote", GetPosition(), ECE_PLACE_ON_SURFACE));
+                        ZenNote noteGround = ZenNote.Cast(g_Game.CreateObjectEx("ZenNote", GetPosition(), ECE_PLACE_ON_SURFACE));
 
                         // If note did not spawn, stop here.
                         if (!noteGround)
@@ -143,7 +143,7 @@ modded class Paper
                             m_NotePickupTries = 0;
 
                             // Attempt to pick up the note from the ground
-                            GetGame().GetCallQueue(CALL_CATEGORY_GAMEPLAY).CallLater(TakeNoteToHands, 200, true, player, noteGround);
+                            g_Game.GetCallQueue(CALL_CATEGORY_GAMEPLAY).CallLater(TakeNoteToHands, 200, true, player, noteGround);
                         } 
                     }
 
@@ -190,20 +190,20 @@ modded class Paper
             // Try to pick up note for ~1 second, if failed just abandon picking up the note and leave it on the ground
             if (m_NotePickupTries >= 5)
             {
-                GetGame().GetCallQueue(CALL_CATEGORY_GAMEPLAY).Remove(TakeNoteToHands);
+                g_Game.GetCallQueue(CALL_CATEGORY_GAMEPLAY).Remove(TakeNoteToHands);
             }
         }
         else
         {
             // If there is no note, no player object, or they're dead, or they're uncon, or they're disconnected, stop trying to pick it up and leave note on ground.
-            GetGame().GetCallQueue(CALL_CATEGORY_GAMEPLAY).Remove(TakeNoteToHands);
+            g_Game.GetCallQueue(CALL_CATEGORY_GAMEPLAY).Remove(TakeNoteToHands);
         }
     }
 
     // Updates the text GUI if it's visible
     void UpdateGUI()
     {
-        UIScriptedMenu menu = GetGame().GetUIManager().GetMenu();
+        UIScriptedMenu menu = g_Game.GetUIManager().GetMenu();
         if (menu)
         {
             ZenNoteGUI noteMenu = ZenNoteGUI.Cast(menu);
@@ -219,10 +219,10 @@ modded class Paper
     void Zen_NoteSendMessage(PlayerBase player, string message)
     {
         Param1<string> m_MessageParam = new Param1<string>("");
-        if (GetGame().IsDedicatedServer() && m_MessageParam && player.IsAlive() && !player.IsPlayerDisconnected() && message != "")
+        if (g_Game.IsDedicatedServer() && m_MessageParam && player.IsAlive() && !player.IsPlayerDisconnected() && message != "")
         {
             m_MessageParam.param1 = message;
-            GetGame().RPCSingleParam(player, ERPCs.RPC_USER_ACTION_MESSAGE, m_MessageParam, true, player.GetIdentity());
+            g_Game.RPCSingleParam(player, ERPCs.RPC_USER_ACTION_MESSAGE, m_MessageParam, true, player.GetIdentity());
         }
     }
 };

@@ -10,7 +10,7 @@ class ZenNotesClientConfig
 	// Load config file
 	void Load()
 	{
-		if (!GetGame().IsClient())
+		if (!g_Game.IsClient())
 			return;
 
 		if (FileExist(zenModFolder + zenConfigName))

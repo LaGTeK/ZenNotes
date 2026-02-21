@@ -45,7 +45,7 @@ class ActionZenWritePaper : ActionContinuousBase
 	// Called when action begins on client-side
 	override void OnStartClient(ActionData action_data)
 	{
-		ZenNoteGUI gui = ZenNoteGUI.Cast(GetGame().GetUIManager().EnterScriptedMenu(ZenNotesMenu.NOTE_GUI, NULL));
+		ZenNoteGUI gui = ZenNoteGUI.Cast(g_Game.GetUIManager().EnterScriptedMenu(ZenNotesMenu.NOTE_GUI, NULL));
 
 		if (gui)
 		{
